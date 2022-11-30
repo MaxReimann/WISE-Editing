@@ -1,3 +1,4 @@
 [submodule "wise"]
 	path = wise
 	url = https://github.com/winfried-ripken/wise
+	branch = minimal_pipeline
