@@ -1,0 +1,1 @@
+HUGGING_FACE=True # if run in hugging face. Disables some things like full NST optimization
