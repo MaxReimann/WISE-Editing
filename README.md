@@ -18,14 +18,14 @@ After optimization, parameters can be tuned by hand to achieve a desired look.
 
 
 ### How does it work?
-We provide a small stylization effect that contains several filters such as bump mapping or edge enhancement that can be optimized. The optimization yields so-called parameter masks, which contain per pixel parameter settings of each filter.
+We provide a small stylization effect that contains several filters such as bump mapping or edge enhancement that can be optimized. The optimization yields so-called parameter masks, which contain per-pixel parameter settings for each filter.
 
 ## 🚀 Try it out 🚀 
 **Our demo is now on huggingface: [huggingface/Whitebox-Style-Transfer-Editing](https://huggingface.co/spaces/MaxReimann/Whitebox-Style-Transfer-Editing)**
 
 ![Streamlit Screenshot](images/screen_wise_demo.jpg?raw=true "WISE Editing Demo")
 
-To run it **locally**, clone the repo recursively and install the dependencies in requirements.txt. Set HUGGINGFACE to false in demo_config.py. 
+To run **locally**, clone the repo recursively and install the dependencies in requirements.txt. Set HUGGINGFACE to false in demo_config.py. 
 Then run the streamlit app using `streamlit run Whitebox_style_transfer.py`
 
 
