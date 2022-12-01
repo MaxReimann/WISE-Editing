@@ -3,9 +3,11 @@ import sys
 import torch.nn.functional as F
 import torch
 
-PACKAGE_PARENT = '../wise/'
+PACKAGE_PARENT = '..'
+WISE_DIR = '../wise/'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, WISE_DIR)))
 
 
 import numpy as np
@@ -17,6 +19,7 @@ from effects.minimal_pipeline import MinimalPipelineEffect
 from helpers.visual_parameter_def import minimal_pipeline_presets, minimal_pipeline_bump_mapping_preset, minimal_pipeline_xdog_preset
 from helpers import torch_to_np, np_to_torch
 from effects import get_default_settings
+from demo_config import HUGGING_FACE
 
 st.set_page_config(page_title="Preset Edit Demo", layout="wide")
 

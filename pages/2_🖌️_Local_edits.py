@@ -12,12 +12,12 @@ from PIL import Image
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
 
-from .. import demo_config
-from demo_config import HUGGING_FACE
 
-PACKAGE_PARENT = '../wise/'
+PACKAGE_PARENT = '..'
+WISE_DIR = '../wise/'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, WISE_DIR)))
 
 
 
@@ -25,6 +25,7 @@ from effects.gauss2d_xy_separated import Gauss2DEffect
 from effects.minimal_pipeline import MinimalPipelineEffect
 from helpers import torch_to_np, np_to_torch
 from effects import get_default_settings
+from demo_config import HUGGING_FACE
 
 st.set_page_config(page_title="Editing Demo", layout="wide")
 
