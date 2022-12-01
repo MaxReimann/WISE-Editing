@@ -18,6 +18,7 @@ import streamlit as st
 from streamlit.logger import get_logger
 from st_click_detector import click_detector
 import streamlit.components.v1 as components
+from streamlit.source_util import get_pages
 from streamlit_extras.switch_page_button import switch_page
 
 from demo_config import HUGGING_FACE
@@ -283,7 +284,11 @@ with coll2:
 
     edit_locally_btn = st.button("Edit Local Parameter Maps")
     if edit_locally_btn:
-        switch_page("Local_edits")
+        switch_page('️ local edits')
+
+    apply_presets = st.button("Paint Presets")
+    if apply_presets:
+        switch_page("Apply_preset")
 
 img_res = render_effect(effect, content_img, vp)
 
