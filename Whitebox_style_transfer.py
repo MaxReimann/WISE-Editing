@@ -144,6 +144,7 @@ def optimize(effect, preset, result_image_placeholder):
     content = st.session_state["Content_im"]
     style = st.session_state["Style_im"]
     result_image_placeholder.text("<- Custom content/style needs to be style transferred")
+    st.sidebar.info("Note: Optimizing takes up to 5 minutes.")
     optimize_button = st.sidebar.button("Optimize Style Transfer")
     if optimize_button:
         if HUGGING_FACE:
