@@ -140,20 +140,27 @@ def img_choice_panel(imgtype, urls, default_choice, expanded):
         st.sidebar.write(f'Selected {imgtype} image:')
         st.sidebar.markdown(f'<img src="{state[f"{imgtype}_render_src"]}" width=240px></img>', unsafe_allow_html=True)
 
-
 def optimize(effect, preset, result_image_placeholder):
     content = st.session_state["Content_im"]
     style = st.session_state["Style_im"]
+    st.session_state["optimize_next"] = False
+    with st.spinner(text="Optimizing parameters.."):
+        if HUGGING_FACE:
+            optimize_on_server(content, style, result_image_placeholder)
+        else:
+            optimize_params(effect, preset, content, style, result_image_placeholder)
+
+def optimize_next(result_image_placeholder):
     result_image_placeholder.text("<- Custom content/style needs to be style transferred")
-    st.sidebar.warning("Note: Optimizing takes up to 5 minutes.")
+    queue_length = 0 if not HUGGING_FACE else get_queue_length()
+    if queue_length > 0:
+        st.sidebar.warning(f"WARNING: Already {queue_length} tasks in the queue. It will take approx {(queue_length+1) * 5} min for your image to be completed.")
+    else:
+        st.sidebar.warning("Note: Optimizing takes up to 5 minutes.")
     optimize_button = st.sidebar.button("Optimize Style Transfer")
     if optimize_button:
-        with st.spinner(text="Optimizing parameters.."):
-            if HUGGING_FACE:
-                optimize_on_server(content, style, result_image_placeholder)
-            else:
-                optimize_params(effect, preset, content, style, result_image_placeholder)
-        return st.session_state["effect_input"], st.session_state["result_vp"]
+        st.session_state["optimize_next"] = True
+        st.experimental_rerun()
     else:
         if not "result_vp" in st.session_state:
             st.stop()
@@ -206,14 +213,23 @@ coll2.header("Global Edits")
 result_image_placeholder = coll1.empty()
 result_image_placeholder.markdown("## loading..")
 
-from tasks import optimize_on_server, optimize_params, monitor_task
+from tasks import optimize_on_server, optimize_params, monitor_task, get_queue_length
 
 if "current_server_task_id" not in st.session_state:
     st.session_state['current_server_task_id'] = None
 
+if "optimize_next" not in st.session_state:
+    st.session_state['optimize_next'] = False
+
+effect, preset = create_effect()
+
 if HUGGING_FACE and st.session_state['current_server_task_id'] is not None: 
     with st.spinner(text="Optimizing parameters.."):
         monitor_task(result_image_placeholder)
+
+if st.session_state["optimize_next"]:
+    print("optimize now")
+    optimize(effect, preset, result_image_placeholder)
 
 img_choice_panel("Content", content_urls, "portrait", expanded=True)
 img_choice_panel("Style", style_urls, "starry_night", expanded=True)
@@ -222,11 +238,10 @@ state = session_state.get()
 content_id = state["Content_id"]
 style_id = state["Style_id"]
 
-effect, preset = create_effect()
 
 print("content id, style id", content_id, style_id  )
 if st.session_state["action"] == "uploaded":
-    content_img, _vp = optimize(effect, preset, result_image_placeholder)
+    content_img, _vp = optimize_next(result_image_placeholder)
 elif st.session_state["action"] in ("switch_page_from_local_edits", "switch_page_from_presets", "slider_change") or \
       content_id == "uploaded" or style_id == "uploaded":
     print("restore param")

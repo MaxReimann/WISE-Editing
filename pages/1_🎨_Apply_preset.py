@@ -42,7 +42,7 @@ presets = {
 
 st.session_state["action"] = "switch_page_from_presets" # on switchback, remember effect input
 
-active_preset = st.sidebar.selectbox("apply preset: ", ["original", "bump mapped", "contoured"])
+active_preset = st.sidebar.selectbox("apply preset: ", ["bump mapped", "contoured", "original"])
 blend_strength = st.sidebar.slider("Parameter blending strength (non-hue) : ", 0.0, 1.0, 1.0, 0.05)
 hue_blend_strength = st.sidebar.slider("Hue-shift blending strength : ", 0.0, 1.0, 1.0, 0.05)
 
@@ -119,3 +119,5 @@ coll2.image(img_res)
 apply_btn = st.sidebar.button("Apply")
 if apply_btn:
     st.session_state["result_vp"] = vp
+
+st.info("Note: Press apply to make changes permanent")
