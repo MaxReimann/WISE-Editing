@@ -57,7 +57,7 @@ st.session_state["preset_canvas_key"] ="preset_canvas"
 vp = torch.clone(st.session_state["result_vp"])
 org_cuda = st.session_state["effect_input"]
 
-@st.experimental_memo
+# @st.experimental_memo
 def greyscale_original(_org_cuda, content_id): #content_id is used for hashing
     if HUGGING_FACE:
         wsize = 450
