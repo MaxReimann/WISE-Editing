@@ -9,6 +9,7 @@ import requests
 import torch
 import torch.nn.functional as F
 from PIL import Image
+import time
 
 PACKAGE_PARENT = 'wise'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
@@ -144,33 +145,15 @@ def optimize(effect, preset, result_image_placeholder):
     content = st.session_state["Content_im"]
     style = st.session_state["Style_im"]
     result_image_placeholder.text("<- Custom content/style needs to be style transferred")
+    st.sidebar.warning("Note: Optimizing takes up to 5 minutes.")
     optimize_button = st.sidebar.button("Optimize Style Transfer")
     if optimize_button:
-        if HUGGING_FACE:
-            result_image_placeholder.warning("NST optimization is currently disabled in this HuggingFace Space because it takes ~5min to optimize. To try it out, please clone the repo and change the huggingface variable in demo_config.py")
-            st.stop()
-
-        result_image_placeholder.text("Executing NST to create reference image..")
-        base_dir = f"result/{datetime.datetime.now().strftime(r'%Y-%m-%d %H.%Mh %Ss')}"
-        os.makedirs(base_dir)
-        with st.spinner(text="Running NST"):
-            reference = strotss(pil_resize_long_edge_to(content, 1024),
-                                pil_resize_long_edge_to(style, 1024), content_weight=16.0,
-                                device=torch.device("cuda"), space="uniform")
-        progress_bar = result_image_placeholder.progress(0.0)
-        ref_save_path = os.path.join(base_dir, "reference.jpg")
-        content_save_path = os.path.join(base_dir, "content.jpg")
-        resize_to = 720
-        reference = pil_resize_long_edge_to(reference, resize_to)
-        reference.save(ref_save_path)
-        content.save(content_save_path)
-        ST_CONFIG["n_iterations"] = 300
         with st.spinner(text="Optimizing parameters.."):
-            vp, content_img_cuda = single_optimize(effect, preset, "l1", content_save_path, str(ref_save_path),
-                                              write_video=False, base_dir=base_dir,
-                                              iter_callback=lambda i: progress_bar.progress(
-                                                  float(i) / ST_CONFIG["n_iterations"]))
-        return content_img_cuda.detach(), vp.cuda().detach()
+            if HUGGING_FACE:
+                optimize_on_server(content, style, result_image_placeholder)
+            else:
+                optimize_params(effect, preset, content, style, result_image_placeholder)
+        return st.session_state["effect_input"], st.session_state["result_vp"]
     else:
         if not "result_vp" in st.session_state:
             st.stop()
@@ -222,6 +205,15 @@ coll1.header("Result")
 coll2.header("Global Edits")
 result_image_placeholder = coll1.empty()
 result_image_placeholder.markdown("## loading..")
+
+from tasks import optimize_on_server, optimize_params, monitor_task
+
+if "current_server_task_id" not in st.session_state:
+    st.session_state['current_server_task_id'] = None
+
+if HUGGING_FACE and st.session_state['current_server_task_id'] is not None: 
+    with st.spinner(text="Optimizing parameters.."):
+        monitor_task(result_image_placeholder)
 
 img_choice_panel("Content", content_urls, "portrait", expanded=True)
 img_choice_panel("Style", style_urls, "starry_night", expanded=True)

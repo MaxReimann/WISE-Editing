@@ -1,0 +1,11 @@
+imageio
+imageio-ffmpeg
+scipy
+Pillow
+numpy
+matplotlib
+--extra-index-url https://download.pytorch.org/whl/cu113
+torch
+torchvision
+Flask
+Flask-Reuploaded
