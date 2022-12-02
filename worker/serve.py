@@ -175,10 +175,12 @@ class StylerQueue:
     def queue_task(self, *args):
         global total_task_count
         total_task_count += 1
-        task = StyleTask(total_task_count, *args)
+        task_id = abs(hash(str(time.time())))
+        print("queued task num. ", total_task_count, "with ID", task_id)
+        task = StyleTask(task_id, *args)
         self.queued_tasks.append(task)
 
-        return total_task_count
+        return task_id
 
     def get_task(self, task_id):
         if self.running_task is not None and self.running_task.task_id == task_id:
@@ -281,4 +283,4 @@ def get_vp():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host="0.0.0.0",port=5000)
+    app.run(debug=False, host="0.0.0.0",port=8600)
