@@ -28,31 +28,7 @@ from parameter_optimization.strotss_org import strotss, pil_resize_long_edge_to
 from helpers import torch_to_np, np_to_torch
 from effects import get_default_settings, MinimalPipelineEffect 
 
-class JSONExceptionHandler(object):
-
-    def __init__(self, app=None):
-        if app:
-            self.init_app(app)
-
-    def std_handler(self, error):
-        response = jsonify(message=error.message)
-        response.status_code = error.code if isinstance(error, HTTPException) else 500
-        return response
-
-
-    def init_app(self, app):
-        self.app = app
-        self.register(HTTPException)
-        for code, v in default_exceptions.items():
-            self.register(code)
-
-    def register(self, exception_or_code, handler=None):
-        self.app.errorhandler(exception_or_code)(handler or self.std_handler)
-
-
-
 app = Flask(__name__)
-handler = JSONExceptionHandler(app)
 
 image_folder = 'img_received'
 photos = UploadSet('photos', IMAGES)
@@ -160,6 +136,8 @@ class StyleTask:
             return
 
         self.status = "finished"
+        del self.neural_optimizer
+        torch.cuda.empty_cache() 
         print("finished styling task: " + str(self.task_id))
 
 class StylerQueue:
@@ -208,6 +186,26 @@ class StylerQueue:
 
 styler_queue = StylerQueue()
 
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(message=str(e)), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return jsonify(message=str(e)), 500
+
+@app.errorhandler(400)
+def caught_error(e, *args):
+    print(args)
+    print(e)
+    return jsonify(message=str(e.description)), 400
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    abort(404, "route not found")
+
+
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -221,15 +219,17 @@ def upload():
         print('added new stylization task', style_filename, content_filename)
 
         return jsonify({"task_id": job_id})
-    abort(jsonify(message="request needs style, content image"), 400)
+    abort(400, description="request needs style, content image")
 
 @app.route('/get_status')
 def get_status():
+    if request.args.get("task_id") is None:
+        abort(400, description="task_id needs to be supplied as parameter")
     task_id = int(request.args.get("task_id"))
     task = styler_queue.get_task(task_id)
 
     if task is None:
-        abort(jsonify(message="task with id %d not found"%task_id), 400) 
+        abort(400, description="task with id %d not found"%task_id)
 
     status = {
         "status": task.status,
@@ -257,27 +257,31 @@ def get_queue_length():
 
 @app.route('/get_image')
 def get_image():
+    if request.args.get("task_id") is None:
+        abort(400, description="task_id needs to be supplied as parameter")
     task_id = int(request.args.get("task_id"))
     task = styler_queue.get_task(task_id)
 
     if task is None:
-        abort(jsonify(message="task with id %d not found"%task_id), 400)
+        abort(400, description="task with id %d not found"%task_id)
 
     if task.status != "finished":
-        abort(jsonify(message="task with id %d not in finished state"%task_id), 400)
+        abort(400, description="task with id %d not in finished state"%task_id)
 
     return send_file(os.path.join(image_folder, task.output_filename), mimetype='image/jpg')
 
 @app.route('/get_vp')
 def get_vp():
+    if request.args.get("task_id") is None:
+        abort(400, description="task_id needs to be supplied as parameter")
     task_id = int(request.args.get("task_id"))
     task = styler_queue.get_task(task_id)
 
     if task is None:
-        abort(jsonify(message="task with id %d not found"%task_id), 400)
+        abort(400, description="task with id %d not found"%task_id)
 
     if task.status != "finished":
-        abort(jsonify(message="task with id %d not in finished state"%task_id), 400)
+        abort(400, description="task with id %d not in finished state"%task_id)
 
     return send_file(os.path.join(image_folder, task.vp_output_filename), mimetype='application/zip')
 
