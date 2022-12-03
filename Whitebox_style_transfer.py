@@ -289,13 +289,15 @@ with coll2:
         st.session_state["action"] = "reset"
         st.experimental_rerun()
 
+    apply_presets = st.button("Paint Presets")
+    if apply_presets:
+        switch_page("Apply_preset")
+
     edit_locally_btn = st.button("Edit Local Parameter Maps")
     if edit_locally_btn:
         switch_page('️ local edits')
 
-    apply_presets = st.button("Paint Presets")
-    if apply_presets:
-        switch_page("Apply_preset")
+
 
 img_res = render_effect(effect, content_img, vp)
 
