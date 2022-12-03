@@ -160,6 +160,8 @@ class StyleTask:
             return
 
         self.status = "finished"
+        del self.neural_optimizer
+        torch.cuda.empty_cache() 
         print("finished styling task: " + str(self.task_id))
 
 class StylerQueue:
