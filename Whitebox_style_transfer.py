@@ -264,22 +264,25 @@ def on_slider():
 
 
 with coll2:
-    show_params_names = [ 'bumpScale', "bumpOpacity", "contourOpacity"]
+    show_params_names = [ 'bumpiness',"bumpSpecular", "contours"]
     display_means = []
+    params_mapping = {"bumpiness": ['bumpScale', "bumpOpacity"], "bumpSpecular": ["bumpSpecular"], "contours": [ "contourOpacity", "contour"]}
     def create_slider(name):
-        mean = torch.mean(vp[:, effect.vpd.name2idx[name]]).item()
-        display_mean = mean + 0.5
+        params = params_mapping[name] if name in params_mapping else [name]
+        means = [torch.mean(vp[:, effect.vpd.name2idx[n]]).item() for n in params]
+        display_mean = np.average(means) + 0.5
         display_means.append(display_mean)
         if "slider_" + name not in st.session_state or st.session_state["action"] != "slider_change": 
           st.session_state["slider_" + name] = display_mean
         slider = st.slider(f"Mean {name}: ", 0.0, 1.0, step=0.05, key="slider_" + name, on_change=on_slider)
-        vp[:, effect.vpd.name2idx[name]] += slider - display_mean
-        vp.clamp_(-0.5, 0.5)
+        for i, param_name in enumerate(params):
+            vp[:, effect.vpd.name2idx[param_name]] += slider - (means[i] + 0.5)
+            vp.clamp_(-0.5, 0.5)
     
     for name in show_params_names:
         create_slider(name)
 
-    others_idx = set(range(len(effect.vpd.vp_ranges))) - set([effect.vpd.name2idx[name] for name in show_params_names])
+    others_idx = set(range(len(effect.vpd.vp_ranges))) - set([effect.vpd.name2idx[name] for name in sum(params_mapping.values(), [])])
     others_names = [effect.vpd.vp_ranges[i][0] for i in sorted(list(others_idx))]
     other_param = st.selectbox("Other parameters: ", others_names)
     create_slider(other_param)
