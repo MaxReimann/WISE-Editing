@@ -118,6 +118,7 @@ def img_choice_panel(imgtype, urls, default_choice, expanded):
 
             if upload_pressed and uploaded_im is not None:
                 img = Image.open(uploaded_im)
+                img = img.convert('RGB')
                 buffered = BytesIO()
                 img.save(buffered, format="JPEG")
                 encoded = base64.b64encode(buffered.getvalue()).decode()
