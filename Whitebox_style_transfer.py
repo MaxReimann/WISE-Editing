@@ -284,7 +284,7 @@ with coll2:
 
     others_idx = set(range(len(effect.vpd.vp_ranges))) - set([effect.vpd.name2idx[name] for name in sum(params_mapping.values(), [])])
     others_names = [effect.vpd.vp_ranges[i][0] for i in sorted(list(others_idx))]
-    other_param = st.selectbox("Other parameters: ", others_names)
+    other_param = st.selectbox("Other parameters: ", ["hueShift"] + [n for n in others_names if n != "hueShift"] )
     create_slider(other_param)
 
 
