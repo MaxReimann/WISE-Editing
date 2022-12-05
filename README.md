@@ -40,3 +40,14 @@ Then run the streamlit app using `streamlit run Whitebox_style_transfer.py`
 ### Further notes
 Pull Requests and further improvements welcome.
 Please note that the shown effect is a minimal pipeline in terms of stylization capability, the much more feature-rich oilpaint and watercolor pipelines we show in our ECCV paper cannot be open-sourced due to IP reasons.
+
+``` latex
+@misc{loetzsch2022wise,
+    title={WISE: Whitebox Image Stylization by Example-based Learning},
+    author={Lötzsch, Winfried and Reimann, Max and Büssemeyer, Martin and Semmo, Amir and Döllner, Jürgen and Trapp, Matthias},
+    year={2022},
+    eprint={2207.14606},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
+}
+```
