@@ -41,6 +41,9 @@ if "click_counter" not in st.session_state:
 
 if "action" not in st.session_state:
     st.session_state["action"] = ""
+    
+if "user" not in st.session_state:
+    st.session_state["user"] = hash(time.time())
 
 content_urls = [
     {
@@ -129,7 +132,7 @@ def img_choice_panel(imgtype, urls, default_choice, expanded):
                 st.write("uploaded.")
 
         last_clicked = last_image_clicked(type=imgtype)
-        print("last_clicked", last_clicked, "clicked", clicked, "action", st.session_state["action"] )
+        print(st.session_state["user"], " last_clicked", last_clicked, "clicked", clicked, "action", st.session_state["action"] )
         if not upload_pressed and clicked != "":  # trigger when no file uploaded
             if last_clicked != clicked:  # only activate when content was actually clicked
                 store_img_from_id(clicked, urls, imgtype)
@@ -146,6 +149,7 @@ def optimize(effect, preset, result_image_placeholder):
     style = st.session_state["Style_im"]
     st.session_state["optimize_next"] = False
     with st.spinner(text="Optimizing parameters.."):
+        print("optimizing for user", st.session_state["user"])
         if HUGGING_FACE:
             optimize_on_server(content, style, result_image_placeholder)
         else:
@@ -245,11 +249,11 @@ if st.session_state["action"] == "uploaded":
     content_img, _vp = optimize_next(result_image_placeholder)
 elif st.session_state["action"] in ("switch_page_from_local_edits", "switch_page_from_presets", "slider_change") or \
       content_id == "uploaded" or style_id == "uploaded":
-    print("restore param")
+    print(st.session_state["user"], "restore param")
     _vp = st.session_state["result_vp"]
     content_img = st.session_state["effect_input"]
 else:
-    print("load_params")
+    print(st.session_state["user"], "load_params")
     content_img, _vp = load_params(content_id, style_id)#, effect)
 
 vp = torch.clone(_vp)
