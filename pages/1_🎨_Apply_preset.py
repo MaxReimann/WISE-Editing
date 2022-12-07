@@ -116,6 +116,8 @@ with torch.no_grad():
 img_res = Image.fromarray((torch_to_np(result_cuda) * 255.0).astype(np.uint8))
 coll2.image(img_res)
 
+print(st.session_state["user"], " edited preset")
+
 apply_btn = st.sidebar.button("Apply")
 if apply_btn:
     st.session_state["result_vp"] = vp
