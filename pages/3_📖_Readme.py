@@ -2,7 +2,7 @@ import streamlit as st
 
 st.title("White-box Style Transfer Editing")
 
-print("readme opened")
+print(st.session_state["user"], " opened readme")
 st.markdown("""
     This app demonstrates the editing capabilities of the White-box Style Transfer Editing (WISE) framework.
     It optimizes the parameters of classical image processing filters to match a given style image.
