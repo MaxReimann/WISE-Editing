@@ -222,6 +222,8 @@ if st.session_state.local_edit_action in ("slider", "param_change", "init"):
     print("set redraw")
     st.session_state.local_edit_action = "redraw"
 
+if "objects" in canvas_result.json_data and canvas_result.json_data["objects"] != []:
+    print(st.session_state["user"], " edited local param canvas")       
 
 print("plot masks")
 texts = []
