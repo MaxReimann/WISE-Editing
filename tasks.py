@@ -108,7 +108,7 @@ def optimize_on_server(content, style, result_image_placeholder):
     style = pil_resize_long_edge_to(style, 1024)
     style.save(style_path)
     files = {'style-image': open(style_path, "rb"), "content-image": open(content_path, "rb")}
-    print("start-optimizing")
+    print("start-optimizing. Time: ", datetime.datetime.now())
     url = WORKER_URL + "/upload"
     task_id_res = requests.post(url, files=files)
     if task_id_res.status_code != 200:
