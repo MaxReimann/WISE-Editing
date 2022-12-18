@@ -54,7 +54,7 @@ class CustomOpts(TestOptions):
 def add_predefined_images():
     images = []
     for f in os.listdir(os.path.join(SCRIPT_DIR, PACKAGE_PARENT, 'images','apdrawing')):
-        if not f.endswith('.png'):
+        if not f.endswith('.jpg'):
             continue
         AB = Image.open(os.path.join(SCRIPT_DIR, PACKAGE_PARENT, 'images','apdrawing', f)).convert('RGB')
         # split AB image into A and B
