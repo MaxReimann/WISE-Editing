@@ -2,7 +2,7 @@ import streamlit as st
 
 st.title("White-box Style Transfer Editing")
 
-print("readme opened")
+print(st.session_state["user"], " opened readme")
 st.markdown("""
     This app demonstrates the editing capabilities of the White-box Style Transfer Editing (WISE) framework.
     It optimizes the parameters of classical image processing filters to match a given style image.
@@ -21,9 +21,9 @@ st.markdown("""
     - Strokes stay on the canvas unless manually deleted by clicking the trash button. To remove them from the canvas after each stroke, tick the corresponding checkbox in the sidebar.
 
     ### Links & Paper 
-    [Project page](https://ivpg.hpi3d.de/wise/),
-    [arxiv link](https://arxiv.org/abs/2207.14606)
-    [demo code](https://github.com/MaxReimann/WISE-Editing)
+    **[Project page](https://ivpg.hpi3d.de/wise/),
+    [arxiv link](https://arxiv.org/abs/2207.14606),
+    [demo code](https://github.com/MaxReimann/WISE-Editing)**
 
     "WISE: Whitebox Image Stylization by Example-based Learning", by Winfried Lötzsch*, Max Reimann*, Martin Büßemeyer, Amir Semmo, Jürgen Döllner, Matthias Trapp, in ECCV 2022
 
