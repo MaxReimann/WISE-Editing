@@ -32,6 +32,7 @@ from local_ppn.options.test_options import TestOptions
 from local_ppn.models import create_model
 
  
+print(st.session_state["user"], " opened xDoG edits")
 
 class CustomOpts(TestOptions):
 
