@@ -12,3 +12,4 @@ streamlit_extras==0.1.5
 st_click_detector
 scipy
 huggingface_hub
+segmentation_models_pytorch 
