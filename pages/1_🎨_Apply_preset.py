@@ -98,7 +98,7 @@ with coll1:
 
 res_data = None
 if canvas_result.image_data is not None:
-    abc = np_to_torch(canvas_result.image_data.astype(np.float)).sum(dim=1, keepdim=True).cuda()
+    abc = np_to_torch(canvas_result.image_data.astype(np.float32)).sum(dim=1, keepdim=True).cuda()
 
     img_org_width = org_cuda.shape[-1]
     img_org_height = org_cuda.shape[-2]
