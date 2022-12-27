@@ -19,7 +19,12 @@ st.markdown("""
     - On the " local editing" page, individual parameter masks can be edited regionally. Choose the parameter on the left sidebar, and use the parameter strength slider to either increase or decrease the strength of the drawn strokes
     - Strokes on the drawing canvas (left column) are updated in real-time on the result in the right column. 
     - Strokes stay on the canvas unless manually deleted by clicking the trash button. To remove them from the canvas after each stroke, tick the corresponding checkbox in the sidebar.
-
+    
+    ### xDoG Prediction
+    - demonstrates parameter prediction networks for line drawings using extended difference of gaussians(xDoG), trained on the APdrawing dataset
+    - The effect pipeline uses a post-processing cnn, to stylize features which are not able to be stylized by xDoG. 
+    - To see the xdog output without post-processing, click the checkmark. Control the global parameters of xDoG using the sliders
+    
     ### Links & Paper 
     **[Project page](https://ivpg.hpi3d.de/wise/),
     [arxiv link](https://arxiv.org/abs/2207.14606),
