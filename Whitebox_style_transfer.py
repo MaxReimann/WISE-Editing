@@ -314,8 +314,7 @@ st.session_state["effect_input"] = content_img
 st.session_state["last_result"] = img_res
 
 with coll1:
-    # width = int(img_res.width * 500 / img_res.height)
-    result_image_placeholder.image(img_res)#, width=width)
+    result_image_placeholder.image(img_res)
 
 # a bit hacky way to return focus to top of page after clicking on images
 components.html(
