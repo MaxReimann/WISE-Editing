@@ -13,3 +13,4 @@ st_click_detector
 scipy
 huggingface_hub
 segmentation_models_pytorch 
+altair<5
