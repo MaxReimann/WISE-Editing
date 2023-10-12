@@ -306,7 +306,6 @@ with coll2:
         switch_page('️ local edits')
 
 
-
 img_res = render_effect(effect, content_img, vp)
 
 st.session_state["result_vp"] = vp
