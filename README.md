@@ -1,4 +1,3 @@
----
 # White-box Style Transfer Editing (WISE) Demo
 
 This app demonstrates the editing capabilities of the [White-box Style Transfer Editing (WISE) framework](https://github.com/winfried-ripken/wise).
