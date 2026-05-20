@@ -1,15 +1,4 @@
 ---
-title: White-box Style Transfer Editing (WISE)
-emoji: 🎨
-colorFrom: pink
-colorTo: red
-sdk: streamlit
-sdk_version: 1.10.0
-app_file: Whitebox_style_transfer.py
-tags: [Style Transfer,Image Synthesis,Editing,Painting]
-pinned: false
-license: mit
----
 # White-box Style Transfer Editing (WISE) Demo
 
 This app demonstrates the editing capabilities of the [White-box Style Transfer Editing (WISE) framework](https://github.com/winfried-ripken/wise).
